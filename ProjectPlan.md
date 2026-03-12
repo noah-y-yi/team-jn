@@ -4,9 +4,9 @@
 
 The goal of our project is to develop a computer vision based system capable of identifying crop diseases from plant images. The use of early detection technology for plant diseases is critical for improving crop yield, reducing agricultural losses, and supporting farming practices. Manual disease identification is a time-consuming task that requires expertise, so the project aims to explore how machine learning and image analysis can assist in the automated disease detection.
 
-Our approach for this project will involve the collection and integration of multiple agricultural datasets, including the Medeley’s “Crop Pest and Disease Detection” dataset, which contains labeled images of crops with different disease conditions. We will combine the image data with supplementary metadata where we will then use it to support analysis and model training.
+Our approach for this project will involve working primarily with the Crop Pest and Disease Detection Dataset, which contains labeled images of crops with different disease conditions. This dataset will be used to train a computer vision model capable of identifying plant diseases. To evaluate how well the model generalizes to new data, we will test the trained model on additional crop disease image datasets collected from other sources. This allows us to assess whether the model can successfully detect diseases in previously unseen images.
 
-Our project will consist of several phases. First, we will acquire and explore the datasets, examining the structure, labels, and quality. Next, we will perform any data cleaning, preprocessing, deidentification, and integration to prepare the data for analysis. We will then train and evaluate our computer vision models capability to detect disease patterns in the crop images. Potential methods we plan to do include convolutional neural networks (CNNs) and transfer learning using pretrained image classification models.
+Our project will consist of several phases. First, we will acquire and explore the datasets, examining the structure, labels, and quality. Next, we will perform any data cleaning, preprocessing, and integration to prepare the data for analysis. We will then train and evaluate our computer vision models capability to detect disease patterns in the crop images. The project will follow a computer vision pipeline consisting of data acquisition, preprocessing, model training, model evaluation, and performance analysis. Potential methods we plan to do include convolutional neural networks (CNNs) and transfer learning using pretrained image classification models.
 
 Lastly, we will evaluate the model’s performance using metrics like accuracy, precision, recall, and F1-score, and confusion matrix to analyze which diseases and crops are most reliably detected from our classifications. The results will demonstrate the use of machine learning tools to support agricultural monitoring and decision making.
 
@@ -27,6 +27,8 @@ This project aims to answer the following analytical questions:
 4. **What preprocessing or feature extraction techniques improve disease detection accuracy?**
 
 5. **How could automated disease detection systems assist farmers or agricultural monitoring systems?**
+
+6. **How well does a model trained on one crop disease dataset perform when evaluated on images from a different dataset?**
 
 These questions will help evaluate the feasibility of using image-based machine learning systems for agricultural disease detection and decision support.
 
@@ -77,7 +79,7 @@ Here are some examples of potential test data for:
 | Mar 24 \- Mar 30 | Data Profiling & QA | Evaluate dataset characteristics including missing values, label consistency, and class distribution. Document data quality issues and initial findings. | All |
 | Mar 31 | Milestone 3: Interim Status Report | Submit [StatusReport.md](http://StatusReport.md) summarizing progress, challenges, updated timeline, and contributions | All |
 | Apr 1 \- Apr 7 | Data Cleaning | Apply cleaning operations such as correcting labels, handling missing values, removing corrupted images, and standardizing formats. Document all cleaning operations. | All |
-| Apr 8 \- Apr 14 | Data Integration | Integrate datasets by aligning crop types, disease labels, or metadata attributes. Develop scripts in Python/Pandas or SQL to combine datasets. | All |
+| Apr 8 \- Apr 14 | External Dataset Testing | Evaluate the trained model’s performance against additional crop disease dataset to measure generalization performance. | All |
 | Apr 15 \- Apr 20 | Model Development | Develop computer vision models for crop disease detection using image classification techniques such as convolutional neural networks (CNNs) or transfer learning. | All |
 | Apr 21 \- Apr 24 | Analysis & Visualization | Evaluate model performance using metrics such as accuracy, precision, recall, and F1-score. Create visualizations of results and dataset characteristics. | All |
 | Apr 25 \- 27 | Workflow Automation | Implement an automated workflow (e.g., Snakemake or scripts) to reproduce the pipeline from data acquisition to results. | All |
@@ -85,7 +87,7 @@ Here are some examples of potential test data for:
 | May 1 \- May 2 | Final Report Preparation | Complete the [README.md](http://README.md) project report including summary, data profile, data quality assessment, cleaning documentation, findings, and challenges. | All |
 | May 3 | Final Project Submission | Create final GitHub release containing report, datasets, scripts, workflow, and documentation. Submit final project URL. | All |
 
-	
+
 
 # Constraints:
 
