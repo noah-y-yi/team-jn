@@ -32,7 +32,39 @@ These questions will help evaluate the feasibility of using image-based machine 
 
 # Datasets:
 
-Lorem ipsum dolor
+[Multi-Crop Disease Dataset](https://data.mendeley.com/datasets/6243z8r6t6/1) (CC BY 4.0), ALTERNATIVELY, [Dataset for Crop Pest and Disease Detection](https://data.mendeley.com/datasets/bwh3zbpkpv/1) (CC BY 4.0)  
+The *Multi-Crop Disease Dataset* was curated by VIT Chennai’s Prem Kumar E. This dataset presents a comprehensive collection of annotated images of diseased and healthy leaves across five important agricultural crops: Banana, Chilli, Radish, Groundnut, and Cauliflower. The dataset was created to support research in plant disease detection, precision agriculture, and deep learning-based crop monitoring systems.
+
+Leaf samples were collected from real farming fields across Chengalpattu, Kanchipuram, and Krishnagiri districts in Tamil Nadu, India, between November and January 2024, captured using high-resolution digital cameras and 200 MP mobile phone cameras. Data contains over 23,000 images labeled using bounding box annotations, including Banana, Chilli, Radish, Groundnut, and Cauliflower. Healthy and diseased samples were captured across multiple disease types (e.g., Sigatoka, Anthracnose, Rust, Downy Mildew, etc.). 
+
+According to the publisher, images are organized by crop name and disease class and annotations are provided in YOLO format (can be converted to COCO/VOC). Meaning this dataset is suitable for training CNN, YOLO, Faster R-CNN, or ViT models for plant disease classification and localization.
+
+Some of the potential applications for this dataset include:
+
+* Real-time disease diagnosis in smart farming systems  
+* Academic research in plant pathology and computer vision  
+* Benchmarking object detection models in agricultural settings
+
+In our case, we would like to use this dataset to train a model. There are two straightforward ways we can do this with this dataset. The first way is to finetune a pretrained model with the given dataset. The second one is to train a model from scratch. Either method is easily accomplished using the open source [ultralytics](https://www.ultralytics.com/) object detection model, which the dataset is already formatted in.
+
+If we determine that this pipeline does not fit the requirements of the project, then we can pivot to using the *Dataset for Crop Pest and Disease Detection*. This dataset presents crop pests/disease datasets sourced from local farms in Ghana. The raw images number over 24,000 images, and this dataset also includes already augmented images that increase the count to over 100,000. This dataset is suitable for both fine tuning and training a model from scratch without bounding box annotations. The data is also not preformatted for a specific model, so we will have more flexibility there.
+
+Choosing either of these datasets allows us to answer our research questions.
+
+After training a model, it might be a good idea to test it on brand new, unseen data from a different source. So to complement the model training data, we also are looking for images from the same crops to test.
+
+Here are some examples of potential test data for:
+
+* Banana \- [Black Sigatoka](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/LQUWXW):  
+  * The banana images dataset was created to contribute to the study of banana diseases diagnostics. The images target the diagnostics of Black Sigatoka and Fusarium Wilt Race 1 diseases.  
+* Chilli \- [Bacterial Spot](https://data.mendeley.com/datasets/w9mr3vf56s/1):  
+  * This dataset is a comprehensive resource for researchers and professionals in agriculture, machine learning, and computer vision, focusing on chili plant disease detection and growth stage classification.  
+* Radish \- [Black Leaf Spot](https://data.mendeley.com/datasets/s973cz2jcd/1):  
+  * Images of radish leaves for disease detection from Bangladesh.  
+* Groundnut \- [Rust](https://data.mendeley.com/datasets/x6x5jkk873/2):  
+  * The image of the groundnut leaves was collected from the agricultural land of Ramchandrapur village in Purba Medinipur district of West Bengal, India. Contains over 1,700 images in JPEG format.  
+* Cauliflower \- [Downy Mildew](https://data.mendeley.com/datasets/x26px3xnmy/1):  
+  * The dataset comprises images of cauliflower plants classified based on the various diseases attacking them. The dataset is meant for applications in plant disease classification and prediction methods. It is aimed at helping plant pathologists and farmers to identify the diseases affecting cauliflower at an early stage, thus preventing their occurrence.
 
 # Timeline:
 
@@ -57,7 +89,17 @@ Lorem ipsum dolor
 
 # Constraints:
 
-Lorem ipsum dolor
+Originally, this project was supposed to make use of two datasets. One would be a dataset of images to train a model visually. The second would be a complementary dataset full of rich metadata to support the predictive power of a potential combined model. The main constraint with this idea is that none of the image datasets contained the metadata necessary to join the two models. Meaning, there was not enough information on the coordinates of where each photo was taken, and no specific time or date of when it was taken.
+
+Another constraint on this project is training time. If we were to train a model from scratch, it would take an exponentially longer time than fine-tuning a model. Because we would like to explore different methods in this project, we will likely build both types of models. The big problem is that it is a time consuming task and we will need to plan around the timing.
+
+# Gaps:
+
+A gap that this current project plan contains is which hardware we will be using for this project. We will need to determine whether to use a local GPU or a cloud-based GPU (e.g. Google Colab). If we were only using a CPU, training a model from scratch would be highly inefficient and create a bottleneck.
+
+Another gap is how we are storing the data. There are a lot of images, and we will need to determine how they will be stored. We can either store the data locally to potentially speed up training, or we can stream from the cloud.
+
+Depending on the dataset we are moving forward with, we can either preprocess the images with the annotated bounding boxes to crop them before sending through a classifier, or we can train an object detection model. This also begs the question of which type of model we should use (classifier vs. object detection).
 
 # Gaps:
 
