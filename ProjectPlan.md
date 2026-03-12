@@ -100,7 +100,3 @@ A gap that this current project plan contains is which hardware we will be using
 Another gap is how we are storing the data. There are a lot of images, and we will need to determine how they will be stored. We can either store the data locally to potentially speed up training, or we can stream from the cloud.
 
 Depending on the dataset we are moving forward with, we can either preprocess the images with the annotated bounding boxes to crop them before sending through a classifier, or we can train an object detection model. This also begs the question of which type of model we should use (classifier vs. object detection).
-
-# Gaps:
-
-Lorem ipsum dolor sit
