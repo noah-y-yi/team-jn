@@ -83,7 +83,36 @@ Not yet started.
 | May 3–5 | Final Report Preparation | Pending |
 | May 7 | Final Project Submission | Pending |
 
+**3\. Project Plan Updates:**  
+**———————————————————————————————————————**
+
+The original plan for the submission of this status report was to have a deadline of 3/31. However, due to popular request, it was extended to be due 4/14. As a result, there are many parts of our timeline that were deferred to be completed alongside this report, such as data storage, organization, and profiling, which have already been committed to the repository.
+
+Another slight change we made to the original project plan was by keeping the directory storage with all of the labeled images, but by only storing them locally. This is due to GitHub’s file storage limits. Instructions to download them correctly can be found in data/README.md. Additionally, we are also currently evaluating whether to set up local hardware for training or utilizing Google Colab’s free resources. We plan to have this determined before model development.
+
+A question from our project plan was determining whether to use a classifier model or object detection model for this project. Since the primary dataset is already annotated in YOLO format, we will be moving forward with object detection for our model for ease of use.
+
+**4\. Challenges:**  
+**———————————————————————————————————————**
+
+1. **Large Dataset Size and Storage**  
+Problem: GitHub has a 100 MB file limit, and the annotated image dataset we downloaded from Mendeley had a size of 978 MB, exceeding the limit.  
+Solution: Each of us downloaded the dataset locally, and ignore pushing the files in our .gitignore. Instructions on how to set up the project with the data is in the data/README.md.
+2. **Extended Deadline and Delayed Start**  
+Problem: Due to the status report extension, we procrastinated and started work late.  
+Solution: Work was completed but also rushed, and the timeline has been adjusted accordingly.
+3. **Dataset Class Imbalance**  
+Problem: After profiling our training set, we noticed an imbalance across the disease categories. The class banana_sigatoka has 6692 annotations while the class cauliflower_Blackrot only has 97. There were other classes that fell below 200 annotations as well. This can lead to bias towards the dominant classes.  
+Solution: During the data cleaning phase, we will look at different strategies such as oversampling.
+4. **Training Time**  
+Problem: Training a computer vision model on a dataset of this size is expensive. Running on a local CPU would take forever.  
+Solution: Depending on our local devices, we can take advantage of hardware such as GPUs. If this proves to be insufficient, it’s possible to look into Google Colab’s free GPUs and TPUs.
+
+
 **5\. Individual Contributions:**  
 **———————————————————————————————————————**  
-Jason Wu:  
+**Jason Wu:**  
 Worked on sections 1 and 2 of the Status Report. Also responsible for downloading and verifying the training dataset (Multi-Crop Disease Dataset), and implementing the Python scripts for profiling and QA.
+
+**Noah Yi:**
+Worked on sections 3 and 4 of the Status Report. Also involved with the research of potential solutions to challenges presented in the project such as the class imbalance and training time problems. 
