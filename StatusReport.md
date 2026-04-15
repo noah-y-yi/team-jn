@@ -112,7 +112,7 @@ Solution: Depending on our local devices, we can take advantage of hardware such
 **5\. Individual Contributions:**  
 **———————————————————————————————————————**  
 **Jason Wu:**  
-Worked on sections 1 and 2 of the Status Report. Also responsible for downloading and verifying the training dataset (Multi-Crop Disease Dataset), and implementing the Python scripts for profiling and QA.
+Worked on sections 1 and 2 of the Status Report. Also responsible for downloading and verifying the training dataset (Multi-Crop Disease Dataset), and implementing the Python scripts for profiling and QA. Utilized Claude for help with research purposes and gather my insights into what is possible with our dataset and help me synthesize the findings to Milestone 3 inorder to best answer each section. No non original work was submitted. 
 
 **Noah Yi:**
 Worked on sections 3 and 4 of the Status Report. Also involved with the research of potential solutions to challenges presented in the project such as the class imbalance and training time problems. 
