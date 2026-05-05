@@ -1,2 +1,2 @@
-# team-jn
-IS477 Project
+# Crop Disease Detection Using Multi-Crop Computer Vision
+
