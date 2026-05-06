@@ -202,16 +202,82 @@ No images or annotation bounding boxes were modified, removed, or resampled. The
 
 ## Findings
 
+The trained model was evaluated on the test set included in the dataset (2191 images). It utilized the Ultralytics validation pipeline ([`scripts/test_model.py`](https://github.com/noah-y-yi/team-jn/blob/main/scripts/test_model.py)). Inference ran at 4.0 ms per image on GPU (1.4 ms preprocessing, 0.2 ms postprocessing).
+
+### Overall Performance
+
+| Metric | Value |
+| :---- | :---- |
+| mAP50 | 0.714 |
+| mAP50-95 | 0.515 |
+| Precision | 0.739 |
+| Recall | 0.670 |
+
+The gap between mAP50 and mAP50-95 indicates that the model does well identifying the disease presence, but does worse producing bounding boxes. For the purposes of our project, we mostly care about disease identification accuracy, but for potential applications of our model, bounding boxes are important as well.
+
+### Per-Class Performance (Sample of 15 Classes)
+
+| Class | mAP50 | mAP50-95 | P | R |
+| :---- | :---- | :---- | :---- | :---- |
+| groundnut\_early\_rust | 0.995 | 0.840 | 0.744 | 0.925 |
+| cauliflower\_healthy | 0.995 | 0.959 | 0.966 | 1 |
+| banana\_healthy | 0.995 | 0.827 | 0.979 | 0.991 |
+| groundnut\_healthy | 0.995 | 0.942 | 0.98 | 1 |
+| banana\_bract\_mosaic\_virus | 0.974 | 0.894 | 0.88 | 1 |
+| cauliflower\_Blackrot | 0.947 | 0.925 | 0.853 | 0.889 |
+| cauliflower\_bacterial\_spot\_rot | 0.985 | 0.441 | 0.908 | 0.938 |
+| groundnut\_early\_rust | 0.945 | 0.638 | 0.744 | 0.925 |
+| groundnut\_late\_leaf\_spot | 0.937 | 0.724 | 0.918 | 0.856 |
+| radish\_black\_leaf\_spot | 0.971 | 0.659 | 0.856 | 1 |
+| banana\_sigatoka | 0.474 | 0.202 | 0.447 | 0.515 |
+| groundnut\_early\_leaf\_spot | 0.216 | 0.071 | 0.509 | 0.122 |
+| chilli\_whitefly | 0.177 | 0.066 | 0.521 | 0.129 |
+| chilli\_leafcurl | 0.113 | 0.063 | 0 | 0 |
+| chilli\_anthracnose | 0.030 | 0.011 | 0.148 | 0.0112 |
+
+From these results, we can clearly see where performance was successful and which classes the model struggled identifying. The model has excellent performance with the healthy plants, as seen with `cauliflower_healthy`, `banana_healthy`, and `groundnut_healthy` scoring high in the mAP50-95. It is also excellent when there are visually distinctive marks, as seen with `cauliflower_Blackrot` and the darker spots.
+
+Where the model struggles is with the chilli diseases. As seen visually, multiple chilli diseases (anthracnose, leafcurl, leafspot, whitefly) produce lesion patterns that overlap visually. The confusion matrix (see [`results/confusion_matrix.png`](https://github.com/noah-y-yi/team-jn/blob/main/results/confusion_matrix.png)) shows substantial cross-class confusion within this group, supporting our visual analysis. A significant outlier in performance is the `groundnut_early_leaf_spot` class, which despite having the largest number of images/annotations (6323), had a low score. This indicates that just having a great number of annotations does not guarantee high detection accuracy. There are additional factors such as visual ambiguity that might throw off models.
+
+Visualization artifacts such as PR curves, F1 curves, confusion matrices, and validation batch predictions are stored in the [`results/`directory](https://github.com/noah-y-yi/team-jn/tree/main/results).
 
 ---
 
 ## Future Work
 
+There were several lessons learned that pave the way for future work:
+
+**1\. Apply class weights to training loss.** The class weights computed in [`data/class_weights.json`](https://github.com/noah-y-yi/team-jn/blob/main/data/class_weights.json) were not applied during training due to Ultralytics' training API limitations. A custom Ultralytics trainer subclass could override the default loss function to incorporate these weights. This would directly penalize misclassification of rare classes more heavily and is expected to improve recall for the lowest-performing Chilli and Cauliflower classes. Documentation to implement a custom trainer with class weights can be found [here](https://docs.ultralytics.com/guides/custom-trainer/#adding-class-weights).
+
+**2\. Data augmentation on smaller class sets.** For classes with much fewer (\<300) training annotations, augmentation (flips, rotations, color filters, mosaics) can increase the training size. Ultralytics already contains features to implement data augmentation natively. By applying it to the underrepresented classes, it can possibly improve targeted accuracy. Documentation to implement data augmentation using Ultralytics can be found [here](https://docs.ultralytics.com/guides/yolo-data-augmentation/).
+
+**3\. Scale up the base pretrained model.** In this project, we used the YOLO26n pretrained model. Also available but significantly heavier are the YOLO26s, YOLO26m, YOLO26l, and YOLO26x models. By upgrading the model, it may improve performance on classes where we deal with visual ambiguity, like the chilli class, and this would not require us to modify any training data. Support for specific YOLO models is discussed briefly [here](https://docs.ultralytics.com/models/yolo26/#what-tasks-does-yolo26-support).
+
+**4\. Testing with external datasets.** In our status report (and `data/README.md`), we identified five external datasets that we were planning to use as more generalized testing. This is because they did not come from the same dataset we used to train and validate our model. By testing the model against images from different cameras, regions, and lighting conditions, it would reveal if our model had learned generalized features or was overfit with the training data. This would be one of the most obvious steps before launching as a product.
+
+**5\. Two-step crop classification.** Because the current model sees the 30 classes equally without first identifying the crop, it could be potentially causing confusion with classes such as the chillis. By first identifying the crop, then the disease, it could solve this confusion and increase performance. It could also lead to higher potential external uses of the model for deployment.
+
+**6\. Deployment.** We purposely export the model as an ONNX format ([`results/best.onnx`](https://github.com/noah-y-yi/team-jn/blob/main/results/best.onnx)) for future deployment. If deployed on a device with a camera to be used in the real world, it could lead to further research and application. Article on deploying an ONNX model can be read [here](https://medium.com/tr-labs-ml-engineering-blog/model-deployment-with-onnx-7b45b82da71c).
+
+**Specific lessons learned:** Class imbalance can potentially be fixed by implementing some more customization while training the model. It requires non-trivial Ultralytics usage which we did not have the time to explore. For future projects, given this baseline model experiment, it’s possible to produce much better results and application. Future work should consider these in advance before training rather than saving it for after. Additionally, some of the diseases for specific crops are just challenging to identify in the first place. By having a greater amount of high-quality annotations from domain experts, it’s possible to increase reliability during training and can also produce better results.
 
 ---
 
 ## Challenges
 
+There were some difficult challenges that we encountered while completing this work:
+
+**1\. Large dataset size and storage constraints.** GitHub enforces a hard 100 MB file size limit, which meant our dataset (around 978 MB zip file) was unable to to be committed. In order to get around this challenge, each of us downloaded the dataset (specifically the zip file) locally, and the data was excluded via the [`.gitignore`](https://github.com/noah-y-yi/team-jn/blob/main/.gitignore) file. Specific instructions on how to reproduce and set up the dataset locally is in the [`data/README.md`](https://github.com/noah-y-yi/team-jn/blob/main/data/README.md) file, which also includes the dataset source URL and verification steps.
+
+**2\. Class imbalance and its negative impact on training.** After profiling, we identified a huge class imbalance (69:1 ratio) between the most and least represented classes. While we computed custom class weights to address this, we were unable to successfully integrate them into the Ultralytics training pipeline due to complexity and time constraints. The model was then trained without the custom weighting, and the results reflect it, with lowly annotated classes performing the poorest.
+
+**3\. Compute resources for training.** Training a YOLO model on 15,310 images for 100 epochs is computationally expensive. Running on a CPU would have been physically incredibly slow. Thus, we relied on local GPU hardware. Training was run on a Dell XPS 16 9640 with a built-in NVIDIA GeForce RTX 4050 Laptop GPU. Without a local GPU, users would likely have to rely on cloud resources such as Google Colab or utilizing NCSA resources. Using Google Colab would introduce session timeout risks during long training runs, which we account for by including the resume block in `train_model.py`.
+
+**4\. Setting up CUDA to run PyTorch with a local GPU.** One of the most frustrating parts of the training process was to set up NVIDIA’s CUDA software to run PyTorch with our local GPU. There were some prerequisites such as [downloading Visual Studio](https://visualstudio.microsoft.com/downloads/) with the “Desktop development with C++” workload, installing the most recent [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda/toolkit), ensuring the device environment variables were correctly set up, and ensuring that `nvcc –version` returns correctly. Because we installed the ultralytics package in our virtual environment already, we then had to uninstall the included PyTorch library and [reinstall the package](https://pytorch.org/get-started/locally/) with our CUDA version. The difficult part of this challenge was just finding working versions and determining the correct steps for installing.
+
+**5\. Poor chilli class performances.** Several disease classes within the chilli crop produce lesion patterns that are difficult to distinguish even for human reviewers. This is reflected in the testing results where we can see that `chilli_anthracnose`, `chilli_leafcurl`, and `chilli_leafspot` all scored below 0.31 in mAP50. This challenge cannot be addressed through data cleaning or model scaling, but rather more distinctive annotation criteria or better review of ambiguous labels.
+
+**6\. Project timeline.** The status report deadline extension incidentally pushed/compressed several of our planned tasks later in the timeline. This sped up model development, testing, and documentation phases into a shorter window. As a result, external dataset acquisition and testing was not completed within the timeframe.
 
 ---
 
@@ -244,6 +310,24 @@ python -m venv .venv
 
 ```
 pip install -r requirements.txt
+```
+
+(OPTIONAL) Setup PyTorch with CUDA:
+
+1. Visit: https://developer.nvidia.com/cuda/toolkit  
+2. Click **Download Now** and ensure it’s installed correctly  
+3. Run these commands
+
+Uninstall the PyTorch from Ultralytics
+
+```
+py -m pip uninstall torch torchvision torchaudio -y
+```
+
+Install PyTorch with the CUDA version
+
+```
+py -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu129 # REPLACE WITH CORRECT URL
 ```
 
 ### 4\. Download the Dataset
