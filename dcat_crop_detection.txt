@@ -1,0 +1,35 @@
+{
+    "@type": "dcat:Dataset",
+    "accessLevel": "public",
+    "contactPoint": [
+        {
+            "fn": "Noah Yi",
+            "hasEmail": "mailto:noahyi2@illinois.edu",
+	    "organization": "University of Illinois Urbana-Champaign"
+        },
+        {
+            "fn": "Jason Wu",
+            "hasEmail": "mailto:jwu249@illinois.edu",
+	    "organization": "University of Illinois Urbana-Champaign"
+        }
+    ],
+    "description": "This dataset and accompanying final report investigates an automated computer vision system to identify and localize 30 disease and health conditions across five import crops (Banana, Chilli, Radish, Groundnut, and Cauliflower). It utilizes the Multi-Crop Disease Dataset, providing 21,875 annotated images in YOLO format for training an object-detection model.",
+    "keyword":
+    [
+        "Computer Vision",
+	"Machine Learning",
+	"Object Detection",
+	"Crop Disease",
+	"Agriculture",
+	"YOLO"
+    ],
+    
+    "modified": "2026-05-06",
+    "publisher":
+    {
+        "@type": "org:Organization",
+        "name": "data.wa.gov"
+    },
+    "Title": "Crop Disease Detection Using Multi-Crop Computer Vision",
+    "License": "https://creativecommons.org/licenses/by/4.0/",
+}
