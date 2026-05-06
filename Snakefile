@@ -49,9 +49,6 @@ rule clean:
     message:
         "Computing class weights to characterize imbalance..."
     shell:
-        # NOTE: cleaning_data.py currently uses hardcoded absolute paths.
-        # Update lines 14 and 41 in that script to use relative paths, or
-        # set REPO_ROOT in your environment before running.
         "python scripts/cleaning_data.py"
 
 

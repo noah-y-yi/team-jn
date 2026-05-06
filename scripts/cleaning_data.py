@@ -11,7 +11,7 @@ import json
 
 # Load profile results from profiling step
 # relative path may differ from user to user
-with open("/Users/jasonwu/Documents/Team-jn/data/profile_results.json", "r") as f:
+with open("data/profile_results.json", "r") as f:
     profile = json.load(f)
 
 # retrieve data 
@@ -38,5 +38,5 @@ output = {
 
 # write output to class_weights.json
 
-with open("/Users/jasonwu/Documents/Team-jn/data/class_weights.json", "w") as f:
+with open("data/class_weights.json", "w") as f:
     json.dump(output, f, indent=2)
